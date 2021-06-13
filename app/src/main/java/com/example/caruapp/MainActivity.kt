@@ -13,18 +13,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
-
         val repo = PokemonRepository()
 
         CoroutineScope(Dispatchers.IO).launch {
             val pokes = repo.get1stGen()
 
-            val poke = pokes[4]
+            if (pokes.isNotEmpty()) {
+                val poke = pokes[4]
 
-            runOnUiThread {
-                findViewById<TextView>(R.id.text).text = poke.name
+                runOnUiThread {
+                    findViewById<TextView>(R.id.text).text = poke.name
+                }
             }
         }
 
