@@ -1,5 +1,9 @@
 package com.example.caruapp
 
+import android.util.Log
+import com.example.caruapp.models.Pokemon
+import com.example.caruapp.models.PokemonList
+
 class PokemonRepository {
     private val baseUrl = "https://pokeapi.co/api/v2"
 
@@ -7,14 +11,31 @@ class PokemonRepository {
         val endpoint = "pokemon/$id"
         val path = "$baseUrl/$endpoint/"
 
-        return Repository().communicate(Repository.GET, path, Pokemon::class.java)
+        when (val result = Repository().communicate(Repository.GET, path, Pokemon::class.java)) {
+            is Repository.Result.Success -> {
+                return result.data
+            }
+            is Repository.Result.Error -> {
+                Log.e(javaClass.simpleName, "Erro na comunicação com a API.", result.exception)
+            }
+        }
+
+        return Pokemon()
     }
 
-    // TODO: trazer uma lista de Pokémons
     fun get1stGen(): List<Pokemon> {
         val endpoint = "pokemon?limit=151"
         val path = "$baseUrl/$endpoint/"
-//        return Repository().communicate(Repository.GET, path, Pokemon::class.java)
-        return Repository().communicate(Repository.GET, path, PokemonList::class.java).results
+
+        when (val result = Repository().communicate(Repository.GET, path, PokemonList::class.java)) {
+            is Repository.Result.Success -> {
+                return result.data.results
+            }
+            is Repository.Result.Error -> {
+                Log.e(javaClass.simpleName, "Erro na comunicação com a API.", result.exception)
+            }
+        }
+
+        return listOf()
     }
 }
