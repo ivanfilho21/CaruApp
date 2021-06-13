@@ -1,7 +1,6 @@
 package com.example.caruapp
 
 import android.os.Bundle
-import android.os.StrictMode
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
